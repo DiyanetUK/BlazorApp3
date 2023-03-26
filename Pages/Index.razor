@@ -63,7 +63,16 @@
                     </label>
                 </p>
 
-                <button type="submit">Submit</button>
+                <button type="submit" class="btn btn-outline-primary" disabled="@isSending">
+                    @if (isSending)
+                    {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    }
+                    else
+                    {
+                        <span>Submit</span>
+                    }
+                </button>
 
                 <p>
                     <a href="http://www.startrek.com/">Star Trek</a>,
@@ -74,10 +83,12 @@
 
             @code {
                 private readonly Starship starship = new() { ProductionDate = DateTime.UtcNow };
+                private bool isSending;
 
                 private void HandleValidSubmit()
                 {
                     Logger.LogInformation("HandleValidSubmit called");
+                    isSending = true;
 
                 // Process the valid form
                 }
