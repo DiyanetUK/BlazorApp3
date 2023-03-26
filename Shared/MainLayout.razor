@@ -1,0 +1,38 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>BlazorApp3</PageTitle>
+
+
+<AuthorizeView>
+    <Authorized>
+        <div class="page">
+            <div class="sidebar">
+                <NavMenu/>
+            </div>
+            <main>
+                <div class="top-row px-4 auth">
+                    <LoginDisplay/>
+                </div>
+
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="w-100 h-100 vh-100 m-auto start-page">
+            <main class="row w-100 h-100 vh-100 align-items-center start-page-background">
+                <div class="col p-5">
+                    <div class="card m-auto" style="width: 16rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Please Sign In</h5>
+                        <p class="card-text">You need to login to access this content.</p>
+                        <a href="MicrosoftIdentity/Account/SignIn" class="btn btn-primary">Login</a>
+                      </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
