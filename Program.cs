@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Authentication;
+using BlazorApp3.Data;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using BlazorApp3.Data;
 using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,12 +10,7 @@ IdentityModelEventSource.ShowPII = true;
 
 // Add services to the container.
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(options =>
-    {
-        builder.Configuration.Bind("AzureAdB2C", options);
-        options.Events ??= new OpenIdConnectEvents();
-        options.Events.OnRedirectToIdentityProvider += OnRedirectToIdentityProviderFunc;
-    });
+    .AddMicrosoftIdentityWebApp(options => { builder.Configuration.Bind("AzureAdB2C", options); });
 
 builder.Services.AddControllersWithViews()
     .AddMicrosoftIdentityUI();
@@ -55,11 +48,11 @@ app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-app.Run();
+app.UseRewriter(
+    new RewriteOptions().Add(
+        context =>
+        {
+            if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignedOut") context.HttpContext.Response.Redirect("/");
+        }));
 
-async Task OnRedirectToIdentityProviderFunc(RedirectContext context)
-{
-    // Custom code here
-    // Don't remove this line
-    await Task.CompletedTask.ConfigureAwait(false);
-}
+app.Run();
