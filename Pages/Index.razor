@@ -7,6 +7,10 @@
 <AuthorizeView>
     <Authorized Context="auth">
         <h1>@auth.User.Identity?.Name</h1>
+        @foreach (var claim in auth.User.Claims)
+        {
+            <p>@claim.Type: @claim.Value</p>
+        }
         <p>Find Your Account</p>
         <div class="row w-50 mt-5">
             <EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit" Context="form">
@@ -38,12 +42,12 @@
                     </label>
                 </p>
                 <div class="mb-3">
-                                    <label for="identifier" class="form-label fw-bold">Maximum Accommodation</label>
-                                    <InputNumber @bind-Value="starship.MaximumAccommodation" class="form-control" id="maximumAccommodation"/>
-                                    <div id="maximumAccommodationHelp" class="form-text">
-                                        <ValidationMessage For="@(() => starship.MaximumAccommodation)"/>
-                                    </div>
-                                </div>
+                    <label for="identifier" class="form-label fw-bold">Maximum Accommodation</label>
+                    <InputNumber @bind-Value="starship.MaximumAccommodation" class="form-control" id="maximumAccommodation"/>
+                    <div id="maximumAccommodationHelp" class="form-text">
+                        <ValidationMessage For="@(() => starship.MaximumAccommodation)"/>
+                    </div>
+                </div>
                 <p>
                     <label>
                         Maximum Accommodation:
