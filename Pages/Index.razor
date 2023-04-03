@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BlazorApp3.Models
+@using System.Security.Claims
 @inject ILogger<Index> Logger
 
 <PageTitle>Index</PageTitle>
@@ -7,6 +8,10 @@
 <AuthorizeView>
     <Authorized Context="auth">
         <h1>@auth.User.Identity?.Name</h1>
+        <img src="@auth.User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value" width="100"/>
+        <p>Email: @auth.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value</p>
+        <p>Name: @auth.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value</p>
+        <p>Surname: @auth.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value</p>
         @foreach (var claim in auth.User.Claims)
         {
             <p>@claim.Type: @claim.Value</p>

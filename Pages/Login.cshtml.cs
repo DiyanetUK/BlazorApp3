@@ -15,6 +15,7 @@ public class LoginModel : PageModel
 
         var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
             .WithRedirectUri(redirectUri)
+            .WithScope("openid profile email")
             .Build();
 
         await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
